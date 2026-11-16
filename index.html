@@ -1,0 +1,147 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Interactive disk scheduling simulator for FCFS, SSTF, SCAN, C-SCAN, LOOK, and C-LOOK algorithms.">
+    <meta name="theme-color" content="#172554">
+    <title>Disk Scheduling Analyzer</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="header">
+    <h1>Disk Scheduling Analyzer</h1>
+    <p>Interactive Operating System Disk Scheduling Simulator</p>
+</header>
+
+<main class="container">
+
+    <section class="panel">
+        <h2>Disk Configuration</h2>
+
+        <label for="queue">Request Queue</label>
+        <input type="text" id="queue"
+            value="98,183,37,122,14,124,65,67"
+            placeholder="Enter requests separated by commas">
+
+        <div class="input-grid">
+            <div>
+                <label for="head">Initial Head Position</label>
+                <input type="number" id="head" value="53">
+            </div>
+
+            <div>
+                <label for="diskSize">Disk Size</label>
+                <input type="number" id="diskSize" value="200">
+            </div>
+        </div>
+
+        <label for="direction">Initial Direction</label>
+        <select id="direction">
+            <option value="right">Right (Higher Cylinders)</option>
+            <option value="left">Left (Lower Cylinders)</option>
+        </select>
+
+        <label for="algorithm">Select Algorithm</label>
+        <select id="algorithm">
+            <option value="FCFS">FCFS</option>
+            <option value="SSTF">SSTF</option>
+            <option value="SCAN">SCAN</option>
+            <option value="CSCAN">C-SCAN</option>
+            <option value="LOOK">LOOK</option>
+            <option value="CLOOK">C-LOOK</option>
+            <option value="ALL">Compare All Algorithms</option>
+        </select>
+
+        <label for="speed">Animation Speed</label>
+        <select id="speed">
+            <option value="1500">Slow</option>
+            <option value="800" selected>Normal</option>
+            <option value="250">Fast</option>
+        </select>
+
+        <button class="primary-btn" id="analyzeBtn">
+            Generate Simulation
+        </button>
+    </section>
+
+    <section class="panel">
+        <h2>Disk Head Simulator</h2>
+
+        <div class="stats">
+            <div class="stat">
+                <span>Current Head</span>
+                <strong id="currentHead">53</strong>
+            </div>
+
+            <div class="stat">
+                <span>Total Movement</span>
+                <strong id="totalMovement">0</strong>
+            </div>
+
+            <div class="stat">
+                <span>Average Movement</span>
+                <strong id="averageMovement">0</strong>
+            </div>
+        </div>
+
+        <div class="disk-area">
+            <div class="disk-labels">
+                <span>0</span>
+                <span id="middleLabel">100</span>
+                <span id="lastLabel">199</span>
+            </div>
+
+            <div class="disk-track" id="diskTrack">
+                <div class="head-marker" id="headMarker">
+                    <div class="head-pin"></div>
+                    <span id="headLabel">53</span>
+                </div>
+            </div>
+
+            <div class="request-labels" id="requestLabels"></div>
+        </div>
+
+        <div class="controls">
+            <button id="playBtn">▶ Play</button>
+            <button id="pauseBtn" class="secondary-btn">Ⅱ Pause</button>
+            <button id="resetBtn" class="secondary-btn">↻ Reset</button>
+        </div>
+
+        <div class="progress-container">
+            <div id="progressBar"></div>
+        </div>
+
+        <p id="status">Generate a simulation to begin.</p>
+    </section>
+
+    <section class="panel">
+        <h2>Seek Sequence</h2>
+        <div id="sequence" class="sequence">
+            Waiting for simulation...
+        </div>
+    </section>
+
+    <section class="panel">
+        <h2>Head Movement Graph</h2>
+        <canvas id="movementChart" role="img" aria-label="Graph of disk head position across the seek sequence"></canvas>
+    </section>
+
+    <section class="panel">
+        <h2>Algorithm Comparison</h2>
+        <div id="comparison">
+            Run Compare All Algorithms to see results.
+        </div>
+    </section>
+
+</main>
+
+<footer>
+    <p>Disk Scheduling Analyzer | Operating Systems Project</p>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
