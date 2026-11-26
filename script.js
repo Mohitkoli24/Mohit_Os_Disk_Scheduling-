@@ -192,17 +192,14 @@ function analyzeDisk() {
     let selected = algorithm;
 
     if (algorithm === "ALL") {
-        showComparison();
-
-        comparisonResults.sort((a,b) =>
+        const rankedResults = [...comparisonResults].sort((a,b) =>
             a.movement - b.movement
         );
 
-        selected = comparisonResults[0].name;
-    } else {
-        $("comparison").innerHTML =
-            "Select Compare All Algorithms to see the comparison.";
+        selected = rankedResults[0].name;
     }
+
+    showComparison(selected);
 
     currentAlgorithm = selected;
 
@@ -382,7 +379,7 @@ function updateButtons() {
 }
 
 // Algorithm comparison
-function showComparison() {
+function showComparison(selected) {
     const best = Math.min(
         ...comparisonResults.map(x => x.movement)
     );
@@ -439,8 +436,7 @@ function showComparison() {
             } (${best} cylinders)
         </p>
         <p style="margin-top:8px">
-            The simulator will animate the algorithm with the
-            lowest head movement.
+            Current simulation: ${selected}.
         </p>
     `;
 
