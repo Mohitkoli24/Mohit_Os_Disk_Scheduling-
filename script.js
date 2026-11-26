@@ -78,7 +78,7 @@ function generateSequence(queue, head, size, algorithm, direction) {
 
                 if (left.length) {
                     sequence.push(0);
-                    sequence.push(...left.reverse());
+                    sequence.push(...left);
                 }
             } else {
                 sequence.push(...left);
@@ -106,7 +106,7 @@ function generateSequence(queue, head, size, algorithm, direction) {
                 sequence.push(...right);
 
                 if (left.length) {
-                    sequence.push(...left.slice().reverse());
+                    sequence.push(...left);
                 }
             } else {
                 sequence.push(...left);
@@ -386,27 +386,44 @@ function showComparison() {
     const best = Math.min(
         ...comparisonResults.map(x => x.movement)
     );
+    const ranked = [...comparisonResults].sort((a, b) =>
+        a.movement - b.movement
+    );
+    const worst = Math.max(...comparisonResults.map(x => x.movement));
 
     let html = `
         <table>
             <thead>
                 <tr>
+                    <th>Rank</th>
                     <th>Algorithm</th>
                     <th>Total Movement</th>
                     <th>Average Movement</th>
+                    <th>Seek Sequence</th>
                 </tr>
             </thead>
             <tbody>
     `;
 
-    comparisonResults.forEach(result => {
+    ranked.forEach((result, index) => {
+        const barWidth = worst === 0
+            ? 100
+            : Math.max(8, (1 - (result.movement - best) / (worst - best || 1)) * 100);
+
         html += `
             <tr>
-                <td>${result.name}</td>
+                <td>${index + 1}</td>
                 <td class="${result.movement === best ? "best" : ""}">
-                    ${result.movement}
+                    ${result.name}
+                </td>
+                <td>
+                    <strong>${result.movement}</strong>
+                    <div class="movement-bar" aria-label="${result.movement} cylinders">
+                        <span style="width:${barWidth}%"></span>
+                    </div>
                 </td>
                 <td>${result.average.toFixed(2)}</td>
+                <td class="sequence-cell">${result.sequence.join(" -> ")}</td>
             </tr>
         `;
     });
