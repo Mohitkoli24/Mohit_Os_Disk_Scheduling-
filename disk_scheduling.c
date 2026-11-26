@@ -295,22 +295,51 @@ int main() {
 
     if (choice == 7) {
         int best = 1;
+        int ranked_algo[7] = {0, 1, 2, 3, 4, 5, 6};
+        int ranked_total[7] = {0};
+        double ranked_average[7] = {0};
 
         printf("\n========== ALGORITHM COMPARISON ==========\n");
+        printf("%-8s | %-18s | %-18s | %-18s\n",
+               "Rank", "Algorithm", "Total Movement", "Average");
+        printf("----------------------------------------------------------------\n");
 
         for (int i = 1; i <= 6; i++) {
             Result r = generate(
                 q, n, head, size, direction, i
             );
-
-            printf("%-8s : %d cylinders\n",
-                   names[i], r.total);
+            ranked_total[i] = r.total;
+            ranked_average[i] = r.average;
 
             if (r.total < generate(
                 q, n, head, size, direction, best
             ).total) {
                 best = i;
             }
+        }
+
+        for (int i = 1; i <= 6; i++) {
+            for (int j = i + 1; j <= 6; j++) {
+                if (ranked_total[j] < ranked_total[i]) {
+                    int temp_total = ranked_total[i];
+                    int temp_algo = ranked_algo[i];
+                    double temp_average = ranked_average[i];
+                    ranked_total[i] = ranked_total[j];
+                    ranked_algo[i] = ranked_algo[j];
+                    ranked_average[i] = ranked_average[j];
+                    ranked_total[j] = temp_total;
+                    ranked_algo[j] = temp_algo;
+                    ranked_average[j] = temp_average;
+                }
+            }
+        }
+
+        for (int rank = 1; rank <= 6; rank++) {
+            int algo = ranked_algo[rank];
+
+            printf("%-8d | %-18s | %-18d | %.2f cylinders\n",
+                   rank, names[algo], ranked_total[rank],
+                   ranked_average[rank]);
         }
 
         printf("\nBest Algorithm: %s\n", names[best]);
